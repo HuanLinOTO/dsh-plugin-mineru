@@ -1,0 +1,11 @@
+# dsh-mineru bundle layer: inserts the dsh-mineru plugin row.
+# Loaded by `dsh plugin --profile <name> add @dsh-external/dsh-mineru`.
+# The `name` is the package entry; Loader resolves it from profile node_modules.
+# Override `baseURL` in the DSH GUI settings (or here) to point at your own MineRU instance.
+- insert:
+    - id: dsh-mineru
+      name: '@dsh-external/dsh-mineru'
+      config:
+        baseURL: 'http://your-mineru-host:18000'
+        # apiKeyEnv defaults to 'MINERU_API_KEY' via the Config schema.
+        # The test instance requires no auth; leave the env var unset.

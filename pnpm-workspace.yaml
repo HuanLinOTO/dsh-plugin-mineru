@@ -1,0 +1,9 @@
+packages:
+  - .
+
+autoInstallPeers: false
+
+# pnpm >= 10 blocks build scripts until allowed. tsdown pulls esbuild;
+# consumers installing from git must allow it or `prepare` fails.
+allowBuilds:
+  esbuild: true

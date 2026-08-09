@@ -158,9 +158,8 @@ declare module 'cordis' {
     }
     readonly connection: {
       readonly rpc: {
-        readonly intercept: (
-          channel: '/api',
-          matches: (endpoint: string) => boolean,
+        readonly handle: (
+          channel: string,
           handler: (endpoint: string, payload: unknown, signal: AbortSignal) => Promise<unknown>,
           options: { readonly authority: 'trusted-host' | 'loopback' },
         ) => unknown

@@ -88,20 +88,18 @@ export interface MineruRpcDeps {
 }
 
 export function registerRpc(ctx: Context, deps: MineruRpcDeps): void {
-  ctx.logger.info('dsh-mineru: registering RPC interceptor on /api channel')
+  ctx.logger.info('dsh-mineru: registering RPC channel /mineru-api')
   const connection = ctx.connection as {
     readonly rpc: {
-      readonly intercept: (
-        channel: '/api',
-        matches: (endpoint: string) => boolean,
+      readonly handle: (
+        channel: '/mineru-api',
         handler: (endpoint: string, payload: unknown, signal: AbortSignal) => Promise<RpcResult<unknown>>,
         options: { readonly authority: 'trusted-host' | 'loopback' },
       ) => unknown
     }
   }
-  connection.rpc.intercept(
-    '/api',
-    ownsEndpoint,
+  connection.rpc.handle(
+    '/mineru-api',
     async (endpoint, payload) => {
       switch (endpoint) {
         case 'mineru/config.get':

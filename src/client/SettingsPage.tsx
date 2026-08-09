@@ -21,7 +21,7 @@ const BACKENDS = ['pipeline', 'vlm-engine', 'hybrid-engine', 'vlm-http-client', 
 const PARSE_METHODS = ['auto', 'txt', 'ocr'] as const
 
 async function callRpc<T>(rpc: ClientConnectionRpc, endpoint: string, payload: unknown): Promise<T> {
-  return rpc.call('/api', endpoint, payload) as Promise<T>
+  return rpc.call('/mineru-api', endpoint, payload) as Promise<T>
 }
 
 export function SettingsPage({ rpc, t }: SettingsPageProps) {

@@ -256,7 +256,9 @@ function toStatusOutput(s: TaskStatusResponse) {
   return out
 }
 
-export function registerTools(ctx: Context, client: MineRUClient, config: ResolvedConfig): void {
+export function registerTools(ctx: Context, getClient: () => MineRUClient, getConfig: () => ResolvedConfig): void {
+  const client = () => getClient()
+  const config = () => getConfig()
   ctx.tools.register(defineTool({
     name: 'mineru_health',
     description:
@@ -282,7 +284,7 @@ export function registerTools(ctx: Context, client: MineRUClient, config: Resolv
     },
     execute: async (_args: unknown, exec: ToolRunContext) => {
       exec.signal.throwIfAborted()
-      const h = await client.health(exec.signal)
+      const h = await client().health(exec.signal)
       return toHealthOutput(h)
     },
   }))
@@ -363,7 +365,7 @@ export function registerTools(ctx: Context, client: MineRUClient, config: Resolv
     execute: async (args: unknown, exec: ToolRunContext) => {
       const a = args as ParseToolArgs
       exec.signal.throwIfAborted()
-      const submit = await client.submitTask(a.file_path, toParseParams(a, config), exec.signal)
+      const submit = await client().submitTask(a.file_path, toParseParams(a, config()), exec.signal)
       return toSubmitOutput(submit)
     },
   }))
@@ -401,7 +403,7 @@ export function registerTools(ctx: Context, client: MineRUClient, config: Resolv
     execute: async (args: unknown, exec: ToolRunContext) => {
       const a = args as { task_id: string }
       exec.signal.throwIfAborted()
-      const status = await client.getTaskStatus(a.task_id, exec.signal)
+      const status = await client().getTaskStatus(a.task_id, exec.signal)
       return toStatusOutput(status)
     },
   }))
@@ -442,7 +444,7 @@ export function registerTools(ctx: Context, client: MineRUClient, config: Resolv
     execute: async (args: unknown, exec: ToolRunContext) => {
       const a = args as { task_id: string }
       exec.signal.throwIfAborted()
-      const result: TaskResultResponse = await client.getTaskResult(a.task_id, exec.signal)
+      const result: TaskResultResponse = await client().getTaskResult(a.task_id, exec.signal)
       const fileStems = Object.keys(result.results)
       const firstStem = fileStems[0]
       const firstResult = firstStem !== undefined ? result.results[firstStem] : undefined
@@ -451,7 +453,7 @@ export function registerTools(ctx: Context, client: MineRUClient, config: Resolv
       const rawResultPath = join(tmpdir(), `mineru-result-${a.task_id}.json`)
       await writeFile(rawResultPath, JSON.stringify(result, null, 2), 'utf8')
 
-      const { content, truncated, fullMdPath } = await maybeTruncateMd(mdContent, config.maxMdOutputChars, a.task_id)
+      const { content, truncated, fullMdPath } = await maybeTruncateMd(mdContent, config().maxMdOutputChars, a.task_id)
 
       const out: {
         task_id: string
@@ -562,11 +564,13 @@ export function registerTools(ctx: Context, client: MineRUClient, config: Resolv
       const a = args as ParseToolArgs & { poll_timeout_ms?: number }
       exec.signal.throwIfAborted()
 
-      const submit = await client.submitTask(a.file_path, toParseParams(a, config), exec.signal)
+      const cfg = config()
+      const c = client()
+      const submit = await c.submitTask(a.file_path, toParseParams(a, cfg), exec.signal)
 
-      const pollTimeoutMs = a.poll_timeout_ms ?? config.pollTimeoutMs
-      const finalStatus = await pollUntilDone(client, submit.task_id, {
-        intervalMs: config.pollIntervalMs,
+      const pollTimeoutMs = a.poll_timeout_ms ?? cfg.pollTimeoutMs
+      const finalStatus = await pollUntilDone(c, submit.task_id, {
+        intervalMs: cfg.pollIntervalMs,
         timeoutMs: pollTimeoutMs,
         signal: exec.signal,
       })
@@ -579,13 +583,13 @@ export function registerTools(ctx: Context, client: MineRUClient, config: Resolv
         }
       }
 
-      const result = await client.getTaskResult(submit.task_id, exec.signal)
+      const result = await c.getTaskResult(submit.task_id, exec.signal)
       const fileStems = Object.keys(result.results)
       const firstStem = fileStems[0]
       const firstResult = firstStem !== undefined ? result.results[firstStem] : undefined
       const mdContent = firstResult?.md_content ?? ''
 
-      const { content, truncated, fullMdPath } = await maybeTruncateMd(mdContent, config.maxMdOutputChars, submit.task_id)
+      const { content, truncated, fullMdPath } = await maybeTruncateMd(mdContent, cfg.maxMdOutputChars, submit.task_id)
 
       const out: {
         task_id: string

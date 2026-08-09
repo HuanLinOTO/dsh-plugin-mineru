@@ -7,6 +7,16 @@
  * DSH staging packages/core/tools/src/schema.ts 与 vendor/cordis。
  */
 
+declare module '*.module.css' {
+  const classes: Record<string, string>
+  export default classes
+}
+
+declare module '*.css' {
+  const classes: Record<string, string>
+  export default classes
+}
+
 declare module '@deepseek-ai/dsh-tools' {
   export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
@@ -134,7 +144,35 @@ declare module 'cordis' {
   export interface Context {
     tools: {
       register(definition: unknown): () => void
+      schemas(): readonly { name: string; description: string }[]
     }
     get(name: string): unknown
+    effect(fn: () => unknown, label?: string): () => void
+    on(event: string, listener: (...args: unknown[]) => unknown): () => void
+    inject(services: readonly string[], callback: (ctx: Context) => void): void
+    readonly logger: {
+      info(...args: unknown[]): void
+      warn(...args: unknown[]): void
+      error(...args: unknown[]): void
+      debug(...args: unknown[]): void
+    }
+    readonly connection: {
+      readonly rpc: {
+        readonly intercept: (
+          channel: '/api',
+          matches: (endpoint: string) => boolean,
+          handler: (endpoint: string, payload: unknown, signal: AbortSignal) => Promise<unknown>,
+          options: { readonly authority: 'trusted-host' | 'loopback' },
+        ) => unknown
+      }
+    }
+    readonly slots: {
+      inject(slotName: string, factory: (ctx: Context) => unknown): void
+      register(options: { name: string; id: string; order?: number; label: () => string; inject: () => unknown }, component: unknown): () => void
+    }
+    readonly locale: {
+      register(ns: string, dicts: Record<string, Record<string, string>>): () => void
+      bind(ns: string): (key: string) => string
+    }
   }
 }

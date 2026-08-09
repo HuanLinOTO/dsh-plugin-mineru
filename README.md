@@ -84,4 +84,4 @@ dsh-mineru/
 
 ## 测试 API
 
-请在内测渠道获取测试实例地址。`cordis.patch.yml` 默认指向 `http://localhost:18000`，请在 DSH GUI 中覆盖 `baseURL` 改为你的 MineRU 服务器地址。
+请自己部署 MinerU 实例。`cordis.patch.yml` 默认指向 `http://localhost:18000`，请在 DSH GUI 中覆盖 `baseURL` 改为你的 MineRU 服务器地址。

@@ -1,17 +1,18 @@
 /**
- * index.ts — dsh-mineru cordis plugin entry.
+ * index.ts — dsh-mineru cordis plugin entry (host half).
  *
- * Exposes 5 MineRU tools (health, submit, status, result, parse_document)
- * to the model via ctx.tools.register(defineTool(...)).
+ * Dual-entry bundle: this is the host half (exports `.`). The browser half
+ * ships via `./client` (see `src/client/index.ts`).
  *
- * Config (Schemastery schema, surfaced in the DSH GUI):
- *   baseURL         — MineRU API base URL (required)
- *   apiKeyEnv       — env var / credential ref for optional API key
- *   defaultBackend  — 'pipeline' (safe) | 'hybrid-engine' | ...
- *   defaultParseMethod, defaultLang, pollIntervalMs, pollTimeoutMs,
- *   requestTimeoutMs, maxMdOutputChars
- *
- * Form: function plugin (export name / inject / Config / apply).
+ * Architecture:
+ *   - 5 model-facing tools (health, submit, status, result, parse_document)
+ *     registered once at load; each tool reads the live client/config via
+ *     getters, so RPC config mutations hot-reload without re-registration.
+ *   - Settings namespace `mineru` persists user edits to `$DSH_HOME/settings.yaml`;
+ *     cordis.yml `config:` is the composition base (first-boot seed).
+ *   - RPC on `/api` channel: `mineru/config.get`/`.set`/`.health` for the
+ *     browser settings page (bypasses the `WEB_SETTINGS_NAMESPACES` wire
+ *     allowlist — same pattern as yet-another-subagent).
  */
 
 import z from 'schemastery'
@@ -19,31 +20,24 @@ import type { Context } from 'cordis'
 import { MineRUClient } from './client.js'
 import { registerTools } from './tools.js'
 import type { ResolvedConfig } from './tools.js'
+import { registerRpc, type MineruRuntimeConfig } from './rpc.js'
+import type {} from '@deepseek-ai/dsh-client-connection'
 
 export const name = 'dsh-mineru'
-export const inject = ['tools']
+export const inject = ['tools', 'connection']
 
 export type MineruBackend = 'pipeline' | 'vlm-engine' | 'hybrid-engine' | 'vlm-http-client' | 'hybrid-http-client'
 export type MineruParseMethod = 'auto' | 'txt' | 'ocr'
 
 export interface Config {
-  /** MineRU API base URL, e.g. 'http://your-mineru-host:18000'. Required. */
   baseURL: string
-  /** Environment variable name (or credential ref) for the optional API key. The plugin reads the key from the DSH credential store if loaded, otherwise from this env var. MineRU's open-source server has no built-in auth, so this is only needed behind an auth-protecting reverse proxy. */
   apiKeyEnv?: string
-  /** Default parsing backend. 'pipeline' is hallucination-free and supports all languages; 'hybrid-engine' is MineRU's default but requires a VLM model on the server. */
   defaultBackend?: MineruBackend
-  /** Default parse method (pipeline/hybrid only). 'auto' = auto-detect, 'txt' = text only (fast, no OCR), 'ocr' = force OCR. */
   defaultParseMethod?: MineruParseMethod
-  /** Default language code for pipeline backend (e.g. 'ch' = Chinese/English/Japanese). */
   defaultLang?: string
-  /** Polling interval (ms) for async task status checks in mineru_parse_document. */
   pollIntervalMs?: number
-  /** Maximum total polling time (ms) for mineru_parse_document before timing out. */
   pollTimeoutMs?: number
-  /** HTTP request timeout (ms) for each individual MineRU API call. */
   requestTimeoutMs?: number
-  /** Maximum characters of markdown returned inline to the model. Full content is saved to a temp file if exceeded. */
   maxMdOutputChars?: number
 }
 
@@ -76,10 +70,8 @@ function resolveConfig(config: Config): ResolvedConfig {
   }
 }
 
-export function apply(ctx: Context, config: Config = {} as Config): void {
-  const resolved = resolveConfig(config)
-
-  const client = new MineRUClient({
+function makeClient(ctx: Context, resolved: ResolvedConfig): MineRUClient {
+  return new MineRUClient({
     baseURL: resolved.baseURL,
     timeoutMs: resolved.requestTimeoutMs,
     apiKeyResolver: async () => {
@@ -98,6 +90,24 @@ export function apply(ctx: Context, config: Config = {} as Config): void {
       return envVal && envVal.length > 0 ? envVal : undefined
     },
   })
+}
 
-  registerTools(ctx, client, resolved)
+export function apply(ctx: Context, config: Config = {} as Config): void {
+  let resolved = resolveConfig(config)
+  let client = makeClient(ctx, resolved)
+
+  const getResolved = (): ResolvedConfig => resolved
+  const getClient = (): MineRUClient => client
+
+  const onConfigChanged = (next: ResolvedConfig): void => {
+    resolved = next
+    client = makeClient(ctx, resolved)
+    ctx.logger.info(`dsh-mineru: config updated, baseURL=${resolved.baseURL}`)
+  }
+
+  // 1. Register tools (once; getters make them see live config).
+  registerTools(ctx, getClient, getResolved)
+
+  // 2. RPC: config CRUD + health probe for the browser settings page.
+  registerRpc(ctx, { getResolved, getClient, onConfigChanged })
 }

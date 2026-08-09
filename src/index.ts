@@ -27,7 +27,7 @@ export type MineruBackend = 'pipeline' | 'vlm-engine' | 'hybrid-engine' | 'vlm-h
 export type MineruParseMethod = 'auto' | 'txt' | 'ocr'
 
 export interface Config {
-  /** MineRU API base URL, e.g. 'http://your-mineru-host:18000' for the test instance or your self-hosted MineRU server. Required. */
+  /** MineRU API base URL, e.g. 'http://your-mineru-host:18000'. Required. */
   baseURL: string
   /** Environment variable name (or credential ref) for the optional API key. The plugin reads the key from the DSH credential store if loaded, otherwise from this env var. MineRU's open-source server has no built-in auth, so this is only needed behind an auth-protecting reverse proxy. */
   apiKeyEnv?: string

@@ -17,7 +17,7 @@
 
 import z from 'schemastery'
 import type { Context } from 'cordis'
-import { MineRUClient } from './client.js'
+import { MinerUClient } from './client.js'
 import { registerTools } from './tools.js'
 import type { ResolvedConfig } from './tools.js'
 import { registerRpc, type MineruRuntimeConfig } from './rpc.js'
@@ -42,7 +42,7 @@ export interface Config {
 }
 
 export const Config: z<Config> = z.object({
-  baseURL: z.string().description('MineRU API base URL (e.g. http://host:18000). Required.'),
+  baseURL: z.string().description('MinerU API base URL (e.g. http://host:18000). Required.'),
   apiKeyEnv: z.string().role('credential-ref').default('MINERU_API_KEY'),
   defaultBackend: z.union(['pipeline', 'vlm-engine', 'hybrid-engine', 'vlm-http-client', 'hybrid-http-client']).default('pipeline'),
   defaultParseMethod: z.union(['auto', 'txt', 'ocr']).default('auto'),
@@ -70,8 +70,8 @@ function resolveConfig(config: Config): ResolvedConfig {
   }
 }
 
-function makeClient(ctx: Context, resolved: ResolvedConfig): MineRUClient {
-  return new MineRUClient({
+function makeClient(ctx: Context, resolved: ResolvedConfig): MinerUClient {
+  return new MinerUClient({
     baseURL: resolved.baseURL,
     timeoutMs: resolved.requestTimeoutMs,
     apiKeyResolver: async () => {
@@ -97,7 +97,7 @@ export function apply(ctx: Context, config: Config = {} as Config): void {
   let client = makeClient(ctx, resolved)
 
   const getResolved = (): ResolvedConfig => resolved
-  const getClient = (): MineRUClient => client
+  const getClient = (): MinerUClient => client
 
   const onConfigChanged = (next: ResolvedConfig): void => {
     resolved = next

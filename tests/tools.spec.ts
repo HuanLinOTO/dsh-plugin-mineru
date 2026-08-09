@@ -12,8 +12,8 @@ import {
   buildFormData,
   sleep,
   pollUntilDone,
-  MineRUClient,
-  MineRUError,
+  MinerUClient,
+  MinerUError,
 } from '../src/client.js'
 import {
   maybeTruncateMd,
@@ -31,8 +31,8 @@ function mockResponse(body: unknown, status = 200): Response {
   })
 }
 
-function makeClient(apiKeyResolver?: () => Promise<string | undefined>): MineRUClient {
-  return new MineRUClient({
+function makeClient(apiKeyResolver?: () => Promise<string | undefined>): MinerUClient {
+  return new MinerUClient({
     baseURL: 'http://test:18000',
     timeoutMs: 5000,
     ...apiKeyResolver ? { apiKeyResolver } : {},
@@ -141,7 +141,7 @@ describe('pollUntilDone', () => {
         .mockResolvedValueOnce({ task_id: 't1', status: 'pending' })
         .mockResolvedValueOnce({ task_id: 't1', status: 'processing' })
         .mockResolvedValueOnce({ task_id: 't1', status: 'completed' }),
-    } as unknown as MineRUClient
+    } as unknown as MinerUClient
 
     const result = await pollUntilDone(mockClient, 't1', {
       intervalMs: 1,
@@ -157,7 +157,7 @@ describe('pollUntilDone', () => {
     const mockClient = {
       getTaskStatus: vi.fn()
         .mockResolvedValueOnce({ task_id: 't1', status: 'failed', error: 'boom' }),
-    } as unknown as MineRUClient
+    } as unknown as MinerUClient
 
     const result = await pollUntilDone(mockClient, 't1', {
       intervalMs: 1,
@@ -173,7 +173,7 @@ describe('pollUntilDone', () => {
   it('throws on timeout', async () => {
     const mockClient = {
       getTaskStatus: vi.fn().mockResolvedValue({ task_id: 't1', status: 'pending' }),
-    } as unknown as MineRUClient
+    } as unknown as MinerUClient
 
     await expect(pollUntilDone(mockClient, 't1', {
       intervalMs: 1,
@@ -205,7 +205,7 @@ describe('maybeTruncateMd', () => {
   })
 })
 
-describe('MineRUClient', () => {
+describe('MinerUClient', () => {
   it('health calls GET /health and returns parsed response', async () => {
     mockFetch.mockResolvedValueOnce(mockResponse({
       status: 'healthy',
@@ -308,7 +308,7 @@ describe('MineRUClient', () => {
     expect(result.results['doc']?.md_content).toBe('# Hello\n\nWorld')
   })
 
-  it('getTaskResult throws MineRUError on 202 (not ready)', async () => {
+  it('getTaskResult throws MinerUError on 202 (not ready)', async () => {
     mockFetch.mockResolvedValueOnce(mockResponse({
       task_id: 't1',
       status: 'processing',
@@ -320,7 +320,7 @@ describe('MineRUClient', () => {
       .rejects.toThrow('returned 202')
   })
 
-  it('getTaskResult throws MineRUError on 404', async () => {
+  it('getTaskResult throws MinerUError on 404', async () => {
     mockFetch.mockResolvedValueOnce(mockResponse({ detail: 'Task not found' }, 404))
 
     const client = makeClient()
@@ -328,7 +328,7 @@ describe('MineRUClient', () => {
       .rejects.toThrow('returned 404')
   })
 
-  it('throws MineRUError on non-JSON response', async () => {
+  it('throws MinerUError on non-JSON response', async () => {
     mockFetch.mockResolvedValueOnce(new Response('not json', {
       status: 200,
       headers: { 'content-type': 'text/plain' },
@@ -354,7 +354,7 @@ describe('MineRUClient', () => {
       task_cleanup_interval_seconds: 300,
     }))
 
-    const client = new MineRUClient({
+    const client = new MinerUClient({
       baseURL: 'http://test:18000',
       timeoutMs: 5000,
       apiKeyResolver: async () => 'secret-key',
@@ -386,7 +386,7 @@ describe('MineRUClient', () => {
       task_cleanup_interval_seconds: 300,
     }))
 
-    const client = new MineRUClient({ baseURL: 'http://test:18000///', timeoutMs: 5000 })
+    const client = new MinerUClient({ baseURL: 'http://test:18000///', timeoutMs: 5000 })
     await client.health(new AbortController().signal)
 
     expect(mockFetch).toHaveBeenCalledWith(
@@ -396,13 +396,13 @@ describe('MineRUClient', () => {
   })
 })
 
-describe('MineRUError', () => {
+describe('MinerUError', () => {
   it('carries status and body', () => {
-    const err = new MineRUError('test message', 404, { detail: 'not found' })
+    const err = new MinerUError('test message', 404, { detail: 'not found' })
     expect(err.message).toBe('test message')
     expect(err.status).toBe(404)
     expect(err.body).toEqual({ detail: 'not found' })
-    expect(err.name).toBe('MineRUError')
+    expect(err.name).toBe('MinerUError')
   })
 })
 

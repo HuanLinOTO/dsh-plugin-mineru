@@ -32,9 +32,9 @@ export type MineruKey =
 export const NS = 'dsh-mineru'
 
 export const en: Record<MineruKey, string> = {
-  'nav': 'MineRU',
-  'page.title': 'MineRU Configuration',
-  'page.intro': 'Configure the MineRU document parsing server. Changes apply immediately to all mineru_* tools.',
+  'nav': 'MinerU',
+  'page.title': 'MinerU Configuration',
+  'page.intro': 'Configure the MinerU document parsing server. Changes apply immediately to all mineru_* tools.',
   'field.baseURL': 'API Base URL',
   'field.baseURL.placeholder': 'http://your-mineru-host:18000',
   'field.apiKeyEnv': 'API Key Env Var',
@@ -64,9 +64,9 @@ export const en: Record<MineruKey, string> = {
 }
 
 export const zh: Record<MineruKey, string> = {
-  'nav': 'MineRU',
-  'page.title': 'MineRU 配置',
-  'page.intro': '配置 MineRU 文档解析服务器。修改后立即对所有 mineru_* 工具生效。',
+  'nav': 'MinerU',
+  'page.title': 'MinerU 配置',
+  'page.intro': '配置 MinerU 文档解析服务器。修改后立即对所有 mineru_* 工具生效。',
   'field.baseURL': 'API 地址',
   'field.baseURL.placeholder': 'http://your-mineru-host:18000',
   'field.apiKeyEnv': 'API Key 环境变量',

@@ -1,5 +1,5 @@
 /**
- * tools.ts — 5 model-facing MineRU tools.
+ * tools.ts — 5 model-facing MinerU tools.
  *
  * Tools:
  *   mineru_health             — GET /health (capacity preflight)
@@ -27,7 +27,7 @@ import {
   type TaskStatusResponse,
   type TaskResultResponse,
   type TaskStatus,
-  MineRUClient,
+  MinerUClient,
   pollUntilDone,
 } from './client.js'
 
@@ -106,7 +106,7 @@ export function renderHealthOutput(value: {
   failed_tasks?: number
   max_concurrent_requests?: number
 }): string {
-  const lines: string[] = [`MineRU server: ${value.status}`]
+  const lines: string[] = [`MinerU server: ${value.status}`]
   if (value.version) lines.push(`Version: ${value.version}`)
   if (value.queued_tasks !== undefined) {
     lines.push(`Queue: ${value.queued_tasks} queued, ${value.processing_tasks ?? 0} processing, ${value.completed_tasks ?? 0} completed, ${value.failed_tasks ?? 0} failed`)
@@ -125,7 +125,7 @@ export function renderSubmitOutput(value: {
   queued_ahead?: number
 }): string {
   const lines: string[] = [
-    `MineRU task submitted: ${value.task_id}`,
+    `MinerU task submitted: ${value.task_id}`,
     `Status: ${value.status}`,
   ]
   if (value.queued_ahead !== undefined) lines.push(`Queued ahead: ${value.queued_ahead}`)
@@ -166,7 +166,7 @@ export function renderResultOutput(value: {
   full_md_path?: string
   raw_result_path?: string
 }): string {
-  const lines: string[] = [`MineRU result for task ${value.task_id}`]
+  const lines: string[] = [`MinerU result for task ${value.task_id}`]
   if (value.backend) lines.push(`Backend: ${value.backend} (v${value.version ?? '?'})`)
   if (value.file_stems && value.file_stems.length > 0) lines.push(`Files: ${value.file_stems.join(', ')}`)
   if (value.raw_result_path) lines.push(`Full result JSON: ${value.raw_result_path}`)
@@ -189,7 +189,7 @@ export function renderParseDocOutput(value: {
   full_md_path?: string
   error?: string
 }): string {
-  const lines: string[] = [`MineRU parse ${value.status} (task: ${value.task_id})`]
+  const lines: string[] = [`MinerU parse ${value.status} (task: ${value.task_id})`]
   if (value.backend) lines.push(`Backend: ${value.backend} (v${value.version ?? '?'})`)
   if (value.file_stems && value.file_stems.length > 0) lines.push(`Files: ${value.file_stems.join(', ')}`)
   if (value.error) {
@@ -256,13 +256,13 @@ function toStatusOutput(s: TaskStatusResponse) {
   return out
 }
 
-export function registerTools(ctx: Context, getClient: () => MineRUClient, getConfig: () => ResolvedConfig): void {
+export function registerTools(ctx: Context, getClient: () => MinerUClient, getConfig: () => ResolvedConfig): void {
   const client = () => getClient()
   const config = () => getConfig()
   ctx.tools.register(defineTool({
     name: 'mineru_health',
     description:
-      'Check MineRU server health and capacity. Returns server status, version, queue depth '
+      'Check MinerU server health and capacity. Returns server status, version, queue depth '
       + '(queued/processing/completed/failed task counts), and max concurrency. '
       + 'Useful before submitting large batch jobs to check available capacity. No parameters required.',
     parameters: {},
@@ -272,7 +272,7 @@ export function registerTools(ctx: Context, getClient: () => MineRUClient, getCo
         additionalProperties: false,
         properties: {
           status: { type: 'string', required: true, description: 'Server health status: "healthy" or "unhealthy".' },
-          version: { type: 'string', description: 'MineRU server version.' },
+          version: { type: 'string', description: 'MinerU server version.' },
           queued_tasks: { type: 'integer', description: 'Number of tasks waiting in queue.' },
           processing_tasks: { type: 'integer', description: 'Number of tasks currently being processed.' },
           completed_tasks: { type: 'integer', description: 'Number of completed tasks (retained 24h).' },
@@ -292,7 +292,7 @@ export function registerTools(ctx: Context, getClient: () => MineRUClient, getCo
   ctx.tools.register(defineTool({
     name: 'mineru_submit_parse_job',
     description:
-      'Submit a document to MineRU for asynchronous parsing and return immediately with a task_id. '
+      'Submit a document to MinerU for asynchronous parsing and return immediately with a task_id. '
       + 'Poll the task status with mineru_get_parse_status, then fetch results with mineru_get_parse_result. '
       + 'Use this for large documents that may take minutes to parse, or when submitting multiple jobs in parallel. '
       + 'The file must be a local filesystem path; if you only have a URL, download it first (e.g., via bash curl). '
@@ -306,7 +306,7 @@ export function registerTools(ctx: Context, getClient: () => MineRUClient, getCo
       backend: {
         type: 'string',
         enum: MINERU_BACKENDS,
-        description: "Parsing backend. 'pipeline': hallucination-free, multi-language. 'hybrid-engine': MineRU default, requires VLM. 'vlm-engine': VLM only.",
+        description: "Parsing backend. 'pipeline': hallucination-free, multi-language. 'hybrid-engine': MinerU default, requires VLM. 'vlm-engine': VLM only.",
       },
       parse_method: {
         type: 'string',
@@ -352,7 +352,7 @@ export function registerTools(ctx: Context, getClient: () => MineRUClient, getCo
         type: 'object',
         additionalProperties: false,
         properties: {
-          task_id: { type: 'string', required: true, description: 'MineRU task ID. Use with mineru_get_parse_status and mineru_get_parse_result.' },
+          task_id: { type: 'string', required: true, description: 'MinerU task ID. Use with mineru_get_parse_status and mineru_get_parse_result.' },
           status: { type: 'string', required: true, description: 'Initial task status (typically "pending").' },
           status_url: { type: 'string', description: 'URL to poll task status.' },
           result_url: { type: 'string', description: 'URL to fetch task result.' },
@@ -373,7 +373,7 @@ export function registerTools(ctx: Context, getClient: () => MineRUClient, getCo
   ctx.tools.register(defineTool({
     name: 'mineru_get_parse_status',
     description:
-      'Check the status of an asynchronous MineRU parsing task. '
+      'Check the status of an asynchronous MinerU parsing task. '
       + 'Returns: "pending" (in queue), "processing" (being parsed), "completed" (done — fetch with mineru_get_parse_result), '
       + 'or "failed" (error occurred). Poll every few seconds; a 1-page PDF takes ~1-2s, large documents can take minutes.',
     parameters: {
@@ -411,7 +411,7 @@ export function registerTools(ctx: Context, getClient: () => MineRUClient, getCo
   ctx.tools.register(defineTool({
     name: 'mineru_get_parse_result',
     description:
-      'Fetch the parsing result for a completed MineRU task. The task must have status "completed" '
+      'Fetch the parsing result for a completed MinerU task. The task must have status "completed" '
       + '(check with mineru_get_parse_status first). Returns the parsed markdown content inline '
       + '(truncated if very large; full content saved to a file). The full structured JSON result '
       + '(including middle_json, content_list, and images if requested at submit time) is always '
@@ -481,7 +481,7 @@ export function registerTools(ctx: Context, getClient: () => MineRUClient, getCo
   ctx.tools.register(defineTool({
     name: 'mineru_parse_document',
     description:
-      'Parse a local document (PDF, image, DOCX, PPTX, or XLSX) via MineRU and return the extracted markdown. '
+      'Parse a local document (PDF, image, DOCX, PPTX, or XLSX) via MinerU and return the extracted markdown. '
       + 'This is the recommended high-level tool: it submits the file, polls until parsing completes (up to poll_timeout_ms), '
       + 'and returns the markdown content inline. For large documents or when you need to interleave other work, '
       + 'use mineru_submit_parse_job + mineru_get_parse_status + mineru_get_parse_result instead. '

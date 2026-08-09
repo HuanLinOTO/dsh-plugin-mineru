@@ -1,7 +1,7 @@
 {
   "name": "@dsh-external/dsh-mineru",
   "version": "0.2.0",
-  "description": "DSH plugin exposing MineRU document parsing tools to the model, with a web UI settings page for the API base URL.",
+  "description": "DSH plugin exposing MinerU document parsing tools to the model, with a web UI settings page for the API base URL.",
   "type": "module",
   "license": "BSD-3-Clause",
   "private": true,

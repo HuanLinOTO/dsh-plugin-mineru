@@ -1,6 +1,6 @@
 # dsh-mineru
 
-DSH 插件：向模型暴露 [MineRU](https://github.com/opendatalab/MinerU) 文档解析工具。MineRU 可将 PDF、图片、DOCX、PPTX、XLSX 等文件转换为结构化的 Markdown / JSON。
+DSH 插件：向模型暴露 [MinerU](https://github.com/opendatalab/MinerU) 文档解析工具。MinerU 可将 PDF、图片、DOCX、PPTX、XLSX 等文件转换为结构化的 Markdown / JSON。
 
 ## 安装
 
@@ -25,7 +25,7 @@ allowBuilds:
 
 | 字段 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `baseURL` | string | *(必填)* | MineRU API 地址，如 `http://your-mineru-host:18000` |
+| `baseURL` | string | *(必填)* | MinerU API 地址，如 `http://your-mineru-host:18000` |
 | `apiKeyEnv` | credential-ref | `MINERU_API_KEY` | API key 的环境变量名 / 凭据引用。测试实例无需鉴权。 |
 | `defaultBackend` | enum | `pipeline` | `pipeline` / `vlm-engine` / `hybrid-engine` / `vlm-http-client` / `hybrid-http-client` |
 | `defaultParseMethod` | enum | `auto` | `auto` / `txt` / `ocr` |
@@ -72,7 +72,7 @@ pnpm run build        # tsdown 构建 → lib/
 dsh-mineru/
 ├── src/
 │   ├── index.ts        # 入口：name、inject、Config（Schemastery）、apply
-│   ├── client.ts       # MineRUClient（基于 fetch 的 HTTP 客户端 + 类型）
+│   ├── client.ts       # MinerUClient（基于 fetch 的 HTTP 客户端 + 类型）
 │   ├── tools.ts        # 5 个 defineTool 定义 + 辅助函数 + registerTools
 │   └── types.d.ts      # @deepseek-ai/dsh-tools + cordis 的环境类型声明
 ├── tests/
@@ -84,4 +84,4 @@ dsh-mineru/
 
 ## 测试 API
 
-请自己部署 MinerU 实例。`cordis.patch.yml` 默认指向 `http://localhost:18000`，请在 DSH GUI 中覆盖 `baseURL` 改为你的 MineRU 服务器地址。
+请自己部署 MinerU 实例。`cordis.patch.yml` 默认指向 `http://localhost:18000`，请在 DSH GUI 中覆盖 `baseURL` 改为你的 MinerU 服务器地址。

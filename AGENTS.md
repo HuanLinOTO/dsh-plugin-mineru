@@ -2,7 +2,7 @@
 
 ## Plugin overview
 
-Bundle-style DSH plugin exposing 5 MineRU document-parsing tools to the model. Config page has `baseURL` + optional API key + parse defaults. Tools wrap the MineRU FastAPI server (v3.4.4, protocol v2).
+Bundle-style DSH plugin exposing 5 MinerU document-parsing tools to the model. Config page has `baseURL` + optional API key + parse defaults. Tools wrap the MinerU FastAPI server (v3.4.4, protocol v2).
 
 ## Key conventions
 
@@ -11,14 +11,14 @@ Bundle-style DSH plugin exposing 5 MineRU document-parsing tools to the model. C
 - **Ambient types**: `src/types.d.ts` declares `@deepseek-ai/dsh-tools` and `cordis` for standalone typecheck (these are private packages, not on npm).
 - **ESM-only**: `"type": "module"`, relative imports use `.js` extensions (NodeNext).
 - **defineTool contract**: `execute` returns a canonical JSON value; `render` is a separate pure projection. `exec.signal` honored at every await point.
-- **API key**: resolved lazily via `ctx.get('credentials')` (if loaded) then `process.env[apiKeyEnv]`. MineRU's open-source server has no built-in auth.
+- **API key**: resolved lazily via `ctx.get('credentials')` (if loaded) then `process.env[apiKeyEnv]`. MinerU's open-source server has no built-in auth.
 
 ## File responsibilities
 
 | File | Role |
 |------|------|
 | `src/index.ts` | Entry: `name`, `inject = ['tools']`, `Config` (Schemastery), `apply` |
-| `src/client.ts` | `MineRUClient` (fetch + signal + optional bearer), `buildFormData`, `pollUntilDone`, `sleep`, types |
+| `src/client.ts` | `MinerUClient` (fetch + signal + optional bearer), `buildFormData`, `pollUntilDone`, `sleep`, types |
 | `src/tools.ts` | 5 `defineTool` definitions, `registerTools()`, render helpers, `maybeTruncateMd` |
 | `src/types.d.ts` | Ambient declarations for peer-dep modules |
 | `tests/tools.spec.ts` | Unit tests (mocked fetch, no live server) |
@@ -38,7 +38,7 @@ pnpm run build        # tsc -p tsconfig.json → lib/
 3. Object schemas must declare `additionalProperties: boolean`.
 4. Honor `exec.signal` — call `exec.signal.throwIfAborted()` before async work and pass `exec.signal` to `fetch`.
 
-## MineRU API gotchas
+## MinerU API gotchas
 
 - Default backend `hybrid-engine` requires a VLM model; use `pipeline` for CPU-only servers.
 - `lang_list` is pipeline-only; silently ignored for VLM/hybrid backends.

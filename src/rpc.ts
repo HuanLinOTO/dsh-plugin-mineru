@@ -13,7 +13,7 @@
 
 import type { Context } from 'cordis'
 import type { RpcResult } from '@deepseek-ai/dsh-host-apiproxy/api'
-import { MineRUClient, type HealthResponse } from './client.js'
+import { MinerUClient, type HealthResponse } from './client.js'
 import type { ResolvedConfig } from './tools.js'
 
 /** Wire shape for mineru config (subset of ResolvedConfig that's user-editable). */
@@ -83,7 +83,7 @@ export function toRuntimeConfig(resolved: ResolvedConfig): MineruRuntimeConfig {
 
 export interface MineruRpcDeps {
   readonly getResolved: () => ResolvedConfig
-  readonly getClient: () => MineRUClient
+  readonly getClient: () => MinerUClient
   readonly onConfigChanged: (next: ResolvedConfig) => void
 }
 

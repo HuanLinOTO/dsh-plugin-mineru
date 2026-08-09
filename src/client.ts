@@ -1,10 +1,10 @@
 /**
- * client.ts — MineRU HTTP client.
+ * client.ts — MinerU HTTP client.
  *
- * Minimal fetch-based client for the MineRU FastAPI server (v3.4.4, protocol v2).
+ * Minimal fetch-based client for the MinerU FastAPI server (v3.4.4, protocol v2).
  * Endpoints: GET /health, POST /tasks, GET /tasks/{id}, GET /tasks/{id}/result.
  *
- * Auth is optional: MineRU's open-source server has no built-in auth. When an
+ * Auth is optional: MinerU's open-source server has no built-in auth. When an
  * API key is resolved (via the credential store or env var), it is sent as
  * `Authorization: Bearer <key>`. Credential-bearing requests reject redirects.
  */
@@ -79,14 +79,14 @@ export interface ParseParams {
   end_page_id?: number
 }
 
-export class MineRUError extends Error {
+export class MinerUError extends Error {
   constructor(
     message: string,
     public readonly status: number,
     public readonly body: unknown,
   ) {
     super(message)
-    this.name = 'MineRUError'
+    this.name = 'MinerUError'
   }
 }
 
@@ -170,18 +170,18 @@ export async function buildFormData(filePath: string, params: ParseParams): Prom
   return form
 }
 
-export interface MineRUClientOptions {
+export interface MinerUClientOptions {
   baseURL: string
   timeoutMs: number
   apiKeyResolver?: () => Promise<string | undefined>
 }
 
-export class MineRUClient {
+export class MinerUClient {
   private readonly baseURL: string
   private readonly timeoutMs: number
   private readonly apiKeyResolver?: () => Promise<string | undefined>
 
-  constructor(opts: MineRUClientOptions) {
+  constructor(opts: MinerUClientOptions) {
     this.baseURL = opts.baseURL.replace(/\/+$/, '')
     this.timeoutMs = opts.timeoutMs
     this.apiKeyResolver = opts.apiKeyResolver
@@ -246,8 +246,8 @@ export class MineRUClient {
             errorBody = null
           }
         }
-        throw new MineRUError(
-          `MineRU ${method} ${path} returned ${status}`,
+        throw new MinerUError(
+          `MinerU ${method} ${path} returned ${status}`,
           status,
           errorBody,
         )
@@ -255,8 +255,8 @@ export class MineRUClient {
 
       const contentType = response.headers.get('content-type') ?? ''
       if (!contentType.includes('application/json')) {
-        throw new MineRUError(
-          `MineRU ${method} ${path} returned non-JSON content-type: ${contentType}`,
+        throw new MinerUError(
+          `MinerU ${method} ${path} returned non-JSON content-type: ${contentType}`,
           status,
           null,
         )
@@ -271,7 +271,7 @@ export class MineRUClient {
 }
 
 export async function pollUntilDone(
-  client: MineRUClient,
+  client: MinerUClient,
   taskId: string,
   opts: { intervalMs: number; timeoutMs: number; signal: AbortSignal },
 ): Promise<TaskStatusResponse> {
@@ -281,7 +281,7 @@ export async function pollUntilDone(
     const status = await client.getTaskStatus(taskId, opts.signal)
     if (status.status === 'completed' || status.status === 'failed') return status
     if (Date.now() >= deadline) {
-      throw new MineRUError(
+      throw new MinerUError(
         `Polling timed out after ${opts.timeoutMs}ms for task ${taskId}`,
         408,
         status,

@@ -1,10 +1,10 @@
 # dsh-mineru bundle layer: inserts the dsh-mineru plugin row.
-# Loaded by `dsh plugin --profile <name> add @dsh-external/dsh-mineru`.
+# Loaded by `dsh plugin --profile <name> add @huanlin/dsh-plugin-mineru`.
 # The `name` is the package entry; Loader resolves it from profile node_modules.
 # baseURL is configured at runtime via the DSH GUI settings page (MinerU section);
 # the value below is the first-boot seed only.
 - insert:
     - id: dsh-mineru
-      name: '@dsh-external/dsh-mineru'
+      name: '@huanlin/dsh-plugin-mineru'
       config:
         baseURL: 'http://localhost:18000'

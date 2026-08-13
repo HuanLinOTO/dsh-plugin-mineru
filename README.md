@@ -6,7 +6,7 @@ DSH 插件：向模型暴露 [MinerU](https://github.com/opendatalab/MinerU) 文
 
 ```sh
 # 从 git 安装（推荐）：
-dsh plugin --profile <profile> add github:dsh-external/dsh-mineru
+dsh plugin --profile <profile> add github:huanlinoto/dsh-plugin-mineru
 
 # 从本地 checkout 开发安装：
 dsh plugin --profile <profile> add link:D:\Projects\deepseek-harness\dsh-mineru
@@ -16,7 +16,7 @@ pnpm ≥10 从 git 安装时，需在 profile 的 `pnpm-workspace.yaml` 中允�
 
 ```yaml
 allowBuilds:
-  '@dsh-external/dsh-mineru': true
+  '@huanlin/dsh-plugin-mineru': true
 ```
 
 ## 配置

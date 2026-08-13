@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import { basename, dirname, resolve as resolvePath } from 'node:path'
 import { existsSync } from 'node:fs'
 
-const ID = '@dsh-external/dsh-mineru'
+const ID = '@huanlin/dsh-plugin-mineru'
 
 const CSS_VIRTUAL_PREFIX = '\0dsh-css:'
 const CSS_VIRTUAL_SUFFIX = '.mjs'

@@ -2,19 +2,21 @@
 
 # dsh-mineru
 
+[![npm version](https://img.shields.io/npm/v/@huanlin/dsh-plugin-mineru)](https://www.npmjs.com/package/@huanlin/dsh-plugin-mineru)
+
 DSH 插件：向模型暴露 [MinerU](https://github.com/opendatalab/MinerU) 文档解析工具。MinerU 可将 PDF、图片、DOCX、PPTX、XLSX 等文件转换为结构化的 Markdown / JSON。
 
 ## 安装
 
 ```sh
-# 从 git 安装（推荐）：
-dsh plugin --profile <profile> add github:huanlinoto/dsh-plugin-mineru
+# 从 npm 安装（推荐）：
+dsh plugin --profile web add @huanlin/dsh-plugin-mineru
 
 # 从本地 checkout 开发安装：
-dsh plugin --profile <profile> add link:D:\Projects\deepseek-harness\dsh-mineru
+dsh plugin --profile web add link:D:\Projects\deepseek-harness\dsh-mineru
 ```
 
-pnpm ≥10 从 git 安装时，需在 profile 的 `pnpm-workspace.yaml` 中允许构建：
+若从 git 安装（pnpm ≥10），需在 profile 的 `pnpm-workspace.yaml` 中允许构建：
 
 ```yaml
 allowBuilds:

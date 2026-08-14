@@ -1,3 +1,5 @@
+本项目已被dshfind.com收录
+
 # dsh-mineru
 
 DSH 插件：向模型暴露 [MinerU](https://github.com/opendatalab/MinerU) 文档解析工具。MinerU 可将 PDF、图片、DOCX、PPTX、XLSX 等文件转换为结构化的 Markdown / JSON。

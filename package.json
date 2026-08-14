@@ -1,6 +1,6 @@
 {
   "name": "@huanlin/dsh-plugin-mineru",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "publishConfig": {
     "access": "public"
   },
@@ -16,7 +16,6 @@
       "import": "./lib/index.js"
     },
     "./client": {
-      "types": "./lib/client.d.ts",
       "default": "./lib/client.js"
     },
     "./package.json": "./package.json"
@@ -45,8 +44,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build": "tsdown --config tsdown.config.ts",
-    "prepare": "tsdown --config tsdown.prepare.config.ts"
+    "build": "tsdown --config tsdown.config.ts"
   },
   "dependencies": {
     "schemastery": "^3.18.0"

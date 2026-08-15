@@ -1,4 +1,6 @@
-本项目已被dshfind.com收录
+[![dshfind](https://dshfind.com/api/badge/huanlinoto/dsh-plugin-mineru?lang=zh)](https://dshfind.com/zh/plugins/huanlinoto/dsh-plugin-mineru?ref=badge)
+
+> 📌 本插件已收录于 [dshfind](https://dshfind.com/zh) 插件超市，点击上方徽章直达主页。
 
 # dsh-mineru
 

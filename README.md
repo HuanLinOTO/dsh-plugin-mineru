@@ -1,6 +1,6 @@
-[![dshfind](https://dshfind.com/api/badge/huanlinoto/dsh-plugin-mineru?lang=zh)](https://dshfind.com/zh/plugins/huanlinoto/dsh-plugin-mineru?ref=badge)
-
-> 📌 本插件已收录于 [dshfind](https://dshfind.com/zh) 插件超市，点击上方徽章直达主页。
+<p align="center">
+  <a href="https://dshfind.com/zh/plugins/huanlinoto/dsh-plugin-mineru"><img src="https://dshfind.com/api/card/huanlinoto/dsh-plugin-mineru?lang=zh" alt="dsh-plugin-mineru card"></a>
+</p>
 
 # dsh-mineru
 

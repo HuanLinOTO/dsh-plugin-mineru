@@ -18,12 +18,25 @@ export const inject = ['slots', 'locale', 'connection']
 export function apply(ctx: ClientContext): void {
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'dsh-mineru: dictionaries')
 
-  const betterLocale = ctx.get('betterLocale') as
-    | { register(ns: string, dicts: Record<string, Record<string, string>>): () => void }
-    | undefined
-  if (betterLocale) {
-    ctx.effect(() => betterLocale.register(NS, dicts), 'dsh-mineru: better-locale override dicts')
-  }
+  ctx.effect(() => {
+    let dispose: (() => void) | undefined
+    const sync = (): void => {
+      dispose?.()
+      dispose = undefined
+      const store = ctx.get('betterLocale') as
+        | { register(ns: string, dicts: Record<string, Record<string, string>>): () => void }
+        | undefined
+      if (store !== undefined) {
+        dispose = store.register(NS, dicts)
+      }
+    }
+    sync()
+    const unsubscribe = ctx.locale.subscribe(sync)
+    return () => {
+      unsubscribe()
+      dispose?.()
+    }
+  }, 'dsh-mineru: better-locale override dicts')
 
   const connection = ctx.connection as unknown as ConnectionHandle
   const t = ctx.locale.bind(NS) as (key: string) => string

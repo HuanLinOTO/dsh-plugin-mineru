@@ -10,13 +10,14 @@
  *     getters, so RPC config mutations hot-reload without re-registration.
  *   - Settings namespace `mineru` persists user edits to `$DSH_HOME/settings.yaml`;
  *     cordis.yml `config:` is the composition base (first-boot seed).
- *   - RPC on `/api` channel: `mineru/config.get`/`.set`/`.health` for the
- *     browser settings page (bypasses the `WEB_SETTINGS_NAMESPACES` wire
- *     allowlist — same pattern as yet-another-subagent).
+ *   - RPC on the `/mineru-api` Connection RPC channel: `mineru/config.get`/
+ *     `.set`/`.health` for the browser settings page (bypasses the
+ *     `WEB_SETTINGS_NAMESPACES` wire allowlist — same pattern as
+ *     yet-another-subagent).
  */
 
 import z from 'schemastery'
-import type { Context } from 'cordis'
+import type { Context } from '@deepseek-ai/cordis'
 import { MinerUClient } from './client.js'
 import { registerTools } from './tools.js'
 import type { ResolvedConfig } from './tools.js'

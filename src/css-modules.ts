@@ -71,8 +71,6 @@ export const CLIENT_EXTERNALS = [
   'react-dom',
   'react/jsx-runtime',
   'cordis',
-  '@deepseek-ai/dsh-client-runtime',
-  '@deepseek-ai/dsh-client-runtime/client',
   '@deepseek-ai/dsh-client-locale',
   '@deepseek-ai/dsh-client-locale/client',
   '@deepseek-ai/dsh-client-connection',
@@ -80,7 +78,6 @@ export const CLIENT_EXTERNALS = [
   '@deepseek-ai/dsh-client-ui-settings',
   '@deepseek-ai/dsh-client-ui-settings/client',
   '@deepseek-ai/dsh-client-ui-slots',
-  '@deepseek-ai/dsh-client-ui-primitives',
 ]
 
 export const CLIENT_ID = ID

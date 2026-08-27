@@ -7,8 +7,8 @@ Bundle-style DSH plugin exposing 5 MinerU document-parsing tools to the model. C
 ## Key conventions
 
 - **Bundle form**: `cordis.patch.yml` inserts one plugin row; `package.json` has `dsh.bundle.patch`. No source patches to DSH staging.
-- **Peer deps**: `cordis` + `@deepseek-ai/dsh-tools` (provided by host). `schemastery` is a direct dependency (config validator).
-- **Ambient types**: `src/types.d.ts` declares `@deepseek-ai/dsh-tools` and `cordis` for standalone typecheck (these are private packages, not on npm).
+- **Peer deps**: `@deepseek-ai/cordis` + `@deepseek-ai/dsh-tools` / `dsh-llm` (host half) and `dsh-client-connection` / `dsh-client-locale` / `dsh-client-ui-settings` / `dsh-client-ui-slots` / `dsh-client-ui-renderer` (client half, type-only). `schemastery` is a direct dependency (config validator).
+- **Types from real packages**: `ctx.tools` / `ctx.connection` / `ctx.locale` / `ctx.slots` come from each package's `@deepseek-ai/cordis` Context merge resolved through node_modules links; `src/types.d.ts` only declares CSS modules.
 - **ESM-only**: `"type": "module"`, relative imports use `.js` extensions (NodeNext).
 - **defineTool contract**: `execute` returns a canonical JSON value; `render` is a separate pure projection. `exec.signal` honored at every await point.
 - **API key**: resolved lazily via `ctx.get('credentials')` (if loaded) then `process.env[apiKeyEnv]`. MinerU's open-source server has no built-in auth.
@@ -17,10 +17,10 @@ Bundle-style DSH plugin exposing 5 MinerU document-parsing tools to the model. C
 
 | File | Role |
 |------|------|
-| `src/index.ts` | Entry: `name`, `inject = ['tools']`, `Config` (Schemastery), `apply` |
+| `src/index.ts` | Entry: `name`, `inject = ['tools', 'connection']`, `Config` (Schemastery), `apply` |
 | `src/client.ts` | `MinerUClient` (fetch + signal + optional bearer), `buildFormData`, `pollUntilDone`, `sleep`, types |
 | `src/tools.ts` | 5 `defineTool` definitions, `registerTools()`, render helpers, `maybeTruncateMd` |
-| `src/types.d.ts` | Ambient declarations for peer-dep modules |
+| `src/types.d.ts` | Ambient CSS-module declarations |
 | `tests/tools.spec.ts` | Unit tests (mocked fetch, no live server) |
 
 ## Commands

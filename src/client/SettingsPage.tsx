@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type { ClientConnectionRpc, RpcResult } from '@deepseek-ai/dsh-client-connection/client'
 import type { MineruRuntimeConfig } from '../rpc.js'
 import type { MineruKey } from './locales.js'
@@ -8,10 +7,9 @@ import css from './SettingsPage.module.css'
 
 export interface MineruSettingsInjected {
   readonly rpc: ClientConnectionRpc
-  readonly t: (key: string) => string
 }
 
-type SettingsPageProps = PropsRuntime<'settings.section'> & PropsLocale<'dsh-mineru'> & MineruSettingsInjected
+type SettingsPageProps = PropsRuntime<'settings.section'> & PropsLocale<'dsh-mineru'> & InjectFace<MineruSettingsInjected>
 
 type ConfigGetResult = RpcResult<{ readonly config: MineruRuntimeConfig }>
 type ConfigSetResult = RpcResult<{ readonly config: MineruRuntimeConfig }>

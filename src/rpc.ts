@@ -1,7 +1,7 @@
 /**
  * rpc.ts — host-side RPC handler for mineru config read/write.
  *
- * Endpoints (all POST on the `/api` channel):
+ * Endpoints (all POST on the `/mineru-api` Connection RPC channel):
  *   - `mineru/config.get`  payload: {} → { baseURL, apiKeyEnv, defaultBackend, ... }
  *   - `mineru/config.set`  payload: { config: Partial<MineruRuntimeConfig> } → { config: MineruRuntimeConfig }
  *   - `mineru/health`      payload: {} → { status, version, ... } | error
@@ -11,10 +11,13 @@
  * (first-boot seed). Mutations hot-reload the in-memory client + tool registration.
  */
 
-import type { Context } from 'cordis'
-import type { RpcResult } from '@deepseek-ai/dsh-host-apiproxy/api'
+import type { Context } from '@deepseek-ai/cordis'
+import type { ConnectionRpcResult } from '@deepseek-ai/dsh-client-connection'
 import { MinerUClient, type HealthResponse } from './client.js'
 import type { ResolvedConfig } from './tools.js'
+
+/** Local alias: the carrier-neutral Connection RPC result shape. */
+type RpcResult<T> = ConnectionRpcResult<T>
 
 /** Wire shape for mineru config (subset of ResolvedConfig that's user-editable). */
 export interface MineruRuntimeConfig {
@@ -89,16 +92,7 @@ export interface MineruRpcDeps {
 
 export function registerRpc(ctx: Context, deps: MineruRpcDeps): void {
   ctx.logger.info('dsh-mineru: registering RPC channel /mineru-api')
-  const connection = ctx.connection as {
-    readonly rpc: {
-      readonly handle: (
-        channel: '/mineru-api',
-        handler: (endpoint: string, payload: unknown, signal: AbortSignal) => Promise<RpcResult<unknown>>,
-        options: { readonly authority: 'trusted-host' | 'loopback' },
-      ) => unknown
-    }
-  }
-  connection.rpc.handle(
+  ctx.connection.rpc.handle(
     '/mineru-api',
     async (endpoint, payload) => {
       switch (endpoint) {
@@ -155,6 +149,5 @@ export function registerRpc(ctx: Context, deps: MineruRpcDeps): void {
           return fail(`unknown endpoint: ${endpoint}`)
       }
     },
-    { authority: 'trusted-host' },
   )
 }

@@ -20,24 +20,13 @@ export function apply(ctx: Context): void {
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'dsh-mineru: dictionaries')
 
   ctx.effect(() => {
-    let dispose: (() => void) | undefined
-    const sync = (): void => {
-      dispose?.()
-      dispose = undefined
-      const store = ctx.get('betterLocale') as
-        | { register(ns: string, dicts: Record<string, Record<string, string>>): () => void }
-        | undefined
-      if (store !== undefined) {
-        dispose = store.register(NS, dicts)
-      }
-    }
-    sync()
-    const unsubscribe = ctx.locale.subscribe(sync)
+    const disposers = Object.entries(dicts).map(([locale, dict]) =>
+      ctx.locale.register(NS, locale, dict),
+    )
     return () => {
-      unsubscribe()
-      dispose?.()
+      for (const dispose of disposers) dispose()
     }
-  }, 'dsh-mineru: better-locale override dicts')
+  }, 'dsh-mineru: language-pack dictionaries')
 
   const connection = ctx.connection as unknown as ConnectionHandle
   const t = ctx.locale.bind(NS)

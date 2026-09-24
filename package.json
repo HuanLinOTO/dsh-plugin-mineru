@@ -1,6 +1,6 @@
 {
   "name": "@huanlin/dsh-plugin-mineru",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "publishConfig": {
     "access": "public"
   },
@@ -47,17 +47,17 @@
     "build": "tsdown --config tsdown.config.ts"
   },
   "dependencies": {
-    "schemastery": "^3.18.0"
+    "@deepseek-ai/schemastery": "^3.18.4"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-client-connection": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-client-locale": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-client-ui-renderer": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-client-ui-settings": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-tools": "^0.1.5-rc.1",
+    "@deepseek-ai/dsh-client-connection": "^0.1.7-rc.1",
+    "@deepseek-ai/dsh-client-locale": "^0.1.7-rc.1",
+    "@deepseek-ai/dsh-client-ui-renderer": "^0.1.7-rc.1",
+    "@deepseek-ai/dsh-client-ui-settings": "^0.1.7-rc.1",
+    "@deepseek-ai/dsh-client-ui-slots": "^0.1.7-rc.1",
+    "@deepseek-ai/dsh-llm": "^0.1.7-rc.1",
+    "@deepseek-ai/dsh-tools": "^0.1.7-rc.1",
     "react": "^18.2.0"
   },
   "peerDependenciesMeta": {

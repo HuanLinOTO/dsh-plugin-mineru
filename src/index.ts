@@ -16,7 +16,7 @@
  *     yet-another-subagent).
  */
 
-import z from 'schemastery'
+import z from '@deepseek-ai/schemastery'
 import type { Context } from '@deepseek-ai/cordis'
 import { MinerUClient } from './client.js'
 import { registerTools } from './tools.js'

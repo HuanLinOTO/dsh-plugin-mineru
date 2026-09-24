@@ -1,4 +1,4 @@
-import z from "schemastery";
+import z from "@deepseek-ai/schemastery";
 import { Context } from "@deepseek-ai/cordis";
 //#region src/index.d.ts
 declare const name = "dsh-mineru";

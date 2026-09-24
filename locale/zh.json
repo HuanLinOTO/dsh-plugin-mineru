@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "MinerU 文档解析",
+    "description": "向模型暴露 MinerU 文档解析工具，将 PDF、图片、DOCX、PPTX、XLSX 等文件转换为结构化 Markdown / JSON；API 地址与解析默认值可在插件页配置。"
+  }
+}

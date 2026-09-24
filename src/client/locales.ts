@@ -1,7 +1,7 @@
 export type MineruKey =
-  | 'nav'
-  | 'page.title'
-  | 'page.intro'
+  | 'page.summary'
+  | 'page.unavailable'
+  | 'page.readOnly'
   | 'field.baseURL'
   | 'field.baseURL.placeholder'
   | 'field.apiKeyEnv'
@@ -15,6 +15,7 @@ export type MineruKey =
   | 'field.maxMdOutputChars'
   | 'action.save'
   | 'action.saved'
+  | 'action.saveFailed'
   | 'action.test'
   | 'action.testing'
   | 'test.healthy'
@@ -32,9 +33,9 @@ export type MineruKey =
 export const NS = 'dsh-mineru'
 
 export const en: Record<MineruKey, string> = {
-  'nav': 'MinerU',
-  'page.title': 'MinerU Configuration',
-  'page.intro': 'Configure the MinerU document parsing server. Changes apply immediately to all mineru_* tools.',
+  'page.summary': 'Configure the MinerU document parsing server (API endpoint, key, parse defaults); changes apply immediately to all mineru_* tools.',
+  'page.unavailable': 'Configuration is unavailable (the plugin entry is not served by this host).',
+  'page.readOnly': 'The active profile does not accept configuration edits.',
   'field.baseURL': 'API Base URL',
   'field.baseURL.placeholder': 'http://your-mineru-host:18000',
   'field.apiKeyEnv': 'API Key Env Var',
@@ -48,6 +49,7 @@ export const en: Record<MineruKey, string> = {
   'field.maxMdOutputChars': 'Max Markdown Output Chars',
   'action.save': 'Save',
   'action.saved': 'Saved',
+  'action.saveFailed': 'Save failed',
   'action.test': 'Test Connection',
   'action.testing': 'Testing…',
   'test.healthy': 'Healthy',
@@ -64,9 +66,9 @@ export const en: Record<MineruKey, string> = {
 }
 
 export const zh: Record<MineruKey, string> = {
-  'nav': 'MinerU',
-  'page.title': 'MinerU 配置',
-  'page.intro': '配置 MinerU 文档解析服务器。修改后立即对所有 mineru_* 工具生效。',
+  'page.summary': '配置 MinerU 文档解析服务器（API 地址、密钥与解析默认值）；修改对所有 mineru_* 工具即时生效。',
+  'page.unavailable': '配置暂不可用（当前 host 未提供此插件条目）。',
+  'page.readOnly': '当前 profile 不接受配置修改。',
   'field.baseURL': 'API 地址',
   'field.baseURL.placeholder': 'http://your-mineru-host:18000',
   'field.apiKeyEnv': 'API Key 环境变量',
@@ -80,6 +82,7 @@ export const zh: Record<MineruKey, string> = {
   'field.maxMdOutputChars': 'Markdown 输出字符上限',
   'action.save': '保存',
   'action.saved': '已保存',
+  'action.saveFailed': '保存失败',
   'action.test': '测试连接',
   'action.testing': '测试中…',
   'test.healthy': '健康',

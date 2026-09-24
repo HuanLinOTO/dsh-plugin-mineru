@@ -7,3 +7,7 @@ autoInstallPeers: false
 # consumers installing from git must allow it or `prepare` fails.
 allowBuilds:
   esbuild: true
+
+minimumReleaseAgeExclude:
+  - '@deepseek-ai/cosmokit@1.8.5'
+  - '@deepseek-ai/schemastery@3.18.4'

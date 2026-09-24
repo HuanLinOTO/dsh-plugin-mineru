@@ -27,7 +27,7 @@ allowBuilds:
 
 ## 配置
 
-在 DSH GUI 设置页或 `cordis.patch.yml` 中配置：
+在 DSH GUI 的 **Plugins 页**（插件列表 → `@huanlin/dsh-plugin-mineru` 包 → `dsh-mineru` 行 → Configure）或 `cordis.patch.yml` 中配置。配置页的修改通过 dsh 0.1.7-rc.1 的 profile-owned Config 持久化到当前 profile 的 `cordis.patch.yml`，并对运行中的 `mineru_*` 工具即时生效：
 
 | 字段 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
@@ -77,10 +77,12 @@ pnpm run build        # tsdown 构建 → lib/
 ```
 dsh-mineru/
 ├── src/
-│   ├── index.ts        # 入口：name、inject、Config（Schemastery）、apply
+│   ├── index.ts        # 入口：name、inject、Config（Schemastery，字段 .volatile()）、apply
 │   ├── client.ts       # MinerUClient（基于 fetch 的 HTTP 客户端 + 类型）
 │   ├── tools.ts        # 5 个 defineTool 定义 + 辅助函数 + registerTools
-│   └── types.d.ts      # @deepseek-ai/dsh-tools + cordis 的环境类型声明
+│   ├── rpc.ts          # mineru.health /api Fetch 路由（Plugins 页配置卡「测试连接」）
+│   ├── client/         # 浏览器半：plugins.row.config 注册（Plugins 页行配置卡）+ configForms 取数/写数
+│   └── types.d.ts      # CSS modules 环境类型声明
 ├── tests/
 │   └── tools.spec.ts   # 单元测试（mock fetch，无需真实服务器）
 ├── cordis.patch.yml    # bundle 层：插入 dsh-mineru 插件行
@@ -90,4 +92,4 @@ dsh-mineru/
 
 ## 测试 API
 
-请自己部署 MinerU 实例。`cordis.patch.yml` 默认指向 `http://localhost:18000`，请在 DSH GUI 中覆盖 `baseURL` 改为你的 MinerU 服务器地址。
+请自己部署 MinerU 实例。`cordis.patch.yml` 默认指向 `http://localhost:18000`，请在 DSH GUI 的 Plugins 页打开本插件的 Configure 页覆盖 `baseURL`，改为你的 MinerU 服务器地址。

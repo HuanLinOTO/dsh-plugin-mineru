@@ -32,10 +32,12 @@
       "@deepseek-ai/dsh-typert-protocol": ["D:/Projects/deepseek-harness/dsh/packages/typert/protocol/lib/types/index.d.ts"],
       "@deepseek-ai/dsh-attachment": ["D:/Projects/deepseek-harness/dsh/packages/attachment/attachment/lib/types/index.d.ts"],
       "@deepseek-ai/dsh-client-connection": ["D:/Projects/deepseek-harness/dsh/packages/client/connection/lib/types/index.d.ts"],
+      "@deepseek-ai/dsh-settings": ["D:/Projects/deepseek-harness/dsh/packages/settings/settings/lib/types/index.d.ts"],
       "@deepseek-ai/dsh-client-connection/client": ["D:/Projects/deepseek-harness/dsh/packages/client/connection/lib/types/client/index.d.ts"],
       "@deepseek-ai/dsh-client-locale/client": ["D:/Projects/deepseek-harness/dsh/packages/client/locale/lib/types/client/index.d.ts"],
       "@deepseek-ai/dsh-client-store": ["D:/Projects/deepseek-harness/dsh/packages/client/store/lib/types/index.d.ts"],
       "@deepseek-ai/dsh-client-ui-settings/client": ["D:/Projects/deepseek-harness/dsh/packages/client/ui-settings/lib/types/client/index.d.ts"],
+      "@deepseek-ai/dsh-client-ui-plugin-manager/client": ["D:/Projects/deepseek-harness/dsh/packages/client/ui-plugin-manager/lib/types/client/index.d.ts"],
       "@deepseek-ai/dsh-client-ui-slots": ["D:/Projects/deepseek-harness/dsh/packages/client/ui-slots/lib/types/index.d.ts"],
       "@deepseek-ai/dsh-client-ui-renderer/client": ["D:/Projects/deepseek-harness/dsh/packages/client/ui-renderer/lib/types/client/index.d.ts"]
     }

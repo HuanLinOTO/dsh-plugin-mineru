@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "MinerU Document Parsing",
+    "description": "Expose MinerU document-parsing tools to the model, converting PDF, image, and Office files into structured Markdown/JSON; the API endpoint and parse defaults are configured on the Plugins page."
+  }
+}

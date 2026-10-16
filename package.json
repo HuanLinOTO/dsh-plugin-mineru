@@ -1,6 +1,6 @@
 {
   "name": "@huanlin/dsh-plugin-mineru",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "publishConfig": {
     "access": "public"
   },
@@ -53,15 +53,15 @@
     "@deepseek-ai/schemastery": "^3.18.4"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-client-connection": "^0.2.0-rc.1",
-    "@deepseek-ai/dsh-client-locale": "^0.2.0-rc.1",
-    "@deepseek-ai/dsh-client-ui-plugin-manager": "^0.2.0-rc.1",
-    "@deepseek-ai/dsh-client-ui-renderer": "^0.2.0-rc.1",
-    "@deepseek-ai/dsh-client-ui-settings": "^0.2.0-rc.1",
-    "@deepseek-ai/dsh-client-ui-slots": "^0.2.0-rc.1",
-    "@deepseek-ai/dsh-llm": "^0.2.0-rc.1",
-    "@deepseek-ai/dsh-tools": "^0.2.0-rc.1",
+    "@deepseek-ai/cordis": "~4.0.5-alpha.2",
+    "@deepseek-ai/dsh-client-connection": "^0.2.1-alpha.5",
+    "@deepseek-ai/dsh-client-locale": "^0.2.1-alpha.5",
+    "@deepseek-ai/dsh-client-ui-plugin-manager": "^0.2.1-alpha.5",
+    "@deepseek-ai/dsh-client-ui-renderer": "^0.2.1-alpha.5",
+    "@deepseek-ai/dsh-client-ui-settings": "^0.2.1-alpha.5",
+    "@deepseek-ai/dsh-client-ui-slots": "^0.2.1-alpha.5",
+    "@deepseek-ai/dsh-llm": "^0.2.1-alpha.5",
+    "@deepseek-ai/dsh-tools": "^0.2.1-alpha.5",
     "react": "^18.2.0"
   },
   "peerDependenciesMeta": {
